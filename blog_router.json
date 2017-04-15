@@ -10,5 +10,9 @@
   {
     "title": "测试ProcessOn插入",
     "url": "markdown/processon_test.md"
+  },
+  {
+    "title": "Page Test",
+    "url": "markdown/test.md"
   }
 ]
