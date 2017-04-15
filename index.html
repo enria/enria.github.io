@@ -1,6 +1,60 @@
-<html>
-<head><title>enria blog</title></head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>enria blog</title>
+    <link rel="stylesheet" href="plugin/bootstrap/css/bootstrap.css">
+    <script src="plugin/jquery.js"></script>
+    <script src="plugin/vue.js"></script>
+    <script src="plugin/marked.js"></script>
+    <script src="plugin/bootstrap/js/bootstrap.js"></script>
+</head>
 <body>
- <iframe id="embed_dom" name="embed_dom" frameborder="0" style="border:1px solid #000;display:block;width:100%; height:400px;" src="https://www.processon.com/embed/58759f4be4b0858234895d56"></iframe>
+<div id="menu" class="col-lg-3">
+    <ul class="list-unstyled">
+        <li v-for="blog in blogs">
+            <a href="#" @click="choose_blog(blog)">{{blog.title}}</a>
+        </li>
+    </ul>
+</div>
+<div id="content" class="col-lg-9">
+    <div id="markdown-html" v-markdown="content"></div>
+</div>
 </body>
+<script src="js/markdown-directive.js"></script>
+<script>
+    $(document).ready(function () {
+        var menu_vm = new Vue({
+            el: "#menu",
+            data: {
+                blogs: []
+            },
+            methods: {
+                choose_blog: function (blog) {
+                    content_vm.blog = blog
+                }
+            }
+        });
+        var content_vm = new Vue({
+            el: "#content",
+            data: {
+                blog: null,
+                content: ""
+            },
+            watch: {
+                blog: function (val) {
+                    var vm = this
+                    $.get(val.url, function (data) {
+                        console.log(data)
+                        vm.content = data
+                    })
+                }
+            }
+        });
+        $.getJSON("blog_router.json", function (data) {
+            menu_vm.blogs = data
+            content_vm.blog = menu_vm.blogs.length>0?menu_vm.blogs[0]:null
+        })
+    })
+</script>
 </html>
