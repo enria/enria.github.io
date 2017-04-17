@@ -57,6 +57,7 @@ A sample image :
 As links, images can also use references instead of inline links :
 
 ![svg](mindmap/b.svg "revolunet logo")
+![svg](http://img.bizhi.sogou.com/images/2012/03/14/124196.jpg "revolunet logo")
 
 
 ## Code
