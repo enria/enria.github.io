@@ -14,5 +14,9 @@
   {
     "title": "Page Test",
     "url": "markdown/test.md"
+  },
+  {
+    "title": "SVG Test",
+    "url": "markdown/svg-test.md"
   }
 ]
