@@ -11,7 +11,7 @@ Vue.directive("markdown",function (el,binding) {
             return  '<div class="panel panel-default" style="width: 66%"><div class="panel-body"><svg data-url="'+href+'"></svg></div></div>'
         }
         else
-            return '<image class="img-responsive" src="'+href+'"/>'
+            return '<div class="panel panel-default" style="width: 66%"><div class="panel-body"><image class="img-responsive" src="'+href+'"/></div></div>'
     }
     el.innerHTML=marked(binding.value,{renderer:renderer})
     var svgs=$(el).find("svg")
