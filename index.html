@@ -8,6 +8,7 @@
     <script src="plugin/vue.js"></script>
     <script src="plugin/marked.js"></script>
     <script src="plugin/bootstrap/js/bootstrap.js"></script>
+    <script src="plugin/jquery.svg.pan.zoom.js"></script>
 </head>
 <body>
 <div id="menu" class="col-lg-3">
@@ -22,6 +23,7 @@
 </div>
 </body>
 <script src="js/markdown-directive.js"></script>
+<script src="js/zoom-svg-directive.js"></script>
 <script>
     $(document).ready(function () {
         var menu_vm = new Vue({
@@ -33,7 +35,7 @@
                 choose_blog: function (blog) {
                     content_vm.blog = blog
                 }
-            }
+        }
         });
         var content_vm = new Vue({
             el: "#content",
@@ -45,7 +47,6 @@
                 blog: function (val) {
                     var vm = this
                     $.get(val.url, function (data) {
-                        console.log(data)
                         vm.content = data
                     })
                 }
