@@ -1,8 +1,5 @@
 [
-  {
-    "title": "SVG Test",
-    "url": "markdown/svg-test.md"
-  },
+  
   {
     "title": "first_blog",
     "url": "markdown/first_blog.md"
@@ -18,5 +15,8 @@
   {
     "title": "Page Test",
     "url": "markdown/test.md"
+  },{
+    "title": "SVG Test",
+    "url": "markdown/svg-test.md"
   }
 ]
