@@ -1,4 +1,4 @@
-Markdownfsa
+Markdown Syntax
 =========================== 
 
 This is a sample markdown file to help you write Markdown quickly :)
