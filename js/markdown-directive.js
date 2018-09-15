@@ -15,8 +15,6 @@ Vue.directive("markdown",function (el,binding) {
     }
     el.innerHTML=marked(binding.value,{renderer:renderer})
     var svgs=$(el).find("svg")
-    console.log(svgs)
-
 
     for(var i=0;i<svgs.length;i++){
         var svg=$(svgs[i])
