@@ -35,7 +35,7 @@ html,body {
   color: #444444;
 }
 #side-type{
-  margin-bottom: 12px;
+  /* margin-bottom: 12px; */
 }
 #side-type .tab{
   display: inline-block;
