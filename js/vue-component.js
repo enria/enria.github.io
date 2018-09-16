@@ -124,19 +124,12 @@ Vue.component('tp-content', {
                             stack.push(0)
                             break;
                         }
-                        if (header.level == current_header().level) {
+                        if (prev_header().level && header.level == current_header().level) {
                             prev_header().children.push(header)
                             stack[stack.length - 1] = stack[stack.length - 1] + 1
                             break;
-                        }
-                        if (header.level < current_header().level) {
-                            if (prev_header().level && header.level > prev_header().level) {
-                                prev_header().children.push(header)
-                                stack[stack.length - 1] = stack[stack.length - 1] + 1
-                                break;
-                            } else {
-                                stack.pop()
-                            }
+                        } else {
+                            stack.pop()
                         }
                     } else {
                         current_header().push(header)
