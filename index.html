@@ -12,7 +12,9 @@
     <script src="https://cdn.bootcss.com/jquery-loading-overlay/2.1.3/loadingoverlay.min.js"></script>
     <script src="js/config.js"></script>
     <script src="js/base64.js"></script>
+    <script src="js/guid.js"></script>
     <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="css/vue-transition.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
         crossorigin="anonymous">
 </head>
@@ -21,82 +23,35 @@
     <div class="layout" style="height: 100%;">
         <div id="side" :style="{width:layout.menu_width_percent+'%'}">
             <div id="side-type">
-                <div class="tab" :class="{active:layout.side_type=='tree'}">Tree</div>
-                <div class="tab">Outline</div>
+                <div class="tab" :class="{active:layout.side_type=='tree'}" @click="layout.side_type='tree'">Tree</div>
+                <div class="tab" :class="{active:layout.side_type=='outline'}" @click="layout.side_type='outline'">Outline</div>
             </div>
-            <template v-if="layout.side_type=='tree'">
-                <tp-menu id="menu" :folder="menu.blogs" @choose-blog="content.blog=$event"></tp-menu>
-            </template>
+            <transition name="slide-fade">
+                <div id="menu" v-if="layout.side_type=='tree'" style="padding-left:16px;">
+                    <tp-menu :folder="menu.blogs" :current_blog="content.blog" @choose-blog="content.blog=$event"></tp-menu>
+                </div>
+            </transition>
+            <transition name="slide-fade">
+                <div id="outline" v-if="layout.side_type=='outline'" style="padding-left:16px;">
+                    <tp-outline :outline="content.outline" :cur_header="content.cur_header" @choose-header="scroll_content($event)"></tp-outline>
+                </div>
+            </transition>
         </div>
         <div id="content" :style="{width:(100-layout.menu_width_percent)+'%'}">
-            <tp-content :blog="content.blog"></tp-content>
+            <tp-content :blog="content.blog" @outline-change="content.outline=$event" :cur_header="content.cur_header"></tp-content>
         </div>
     </div>
 </body>
+<script src="js/vue-component.js"></script>
 <script src="js/markdown-directive.js"></script>
 <script>
     $(document).ready(function () {
-        Vue.component("tp-folder", {
-            props: ["folder", "name", "prop_display"],
-            data: function () {
-                return {
-                    display: !!this.prop_display
-                }
-            },
-            template: `
-                    <div>
-                        <span v-if="name" @click="display=!display"> <i class="fas fa-folder"></i>{{name}}</span>
-                        <ul v-show="display">
-                            <li v-for="(value,key) in folder">
-                                <template v-if="!value.type">
-                                    <tp-folder :folder="value" :name="key" @choose-blog="$emit('choose-blog',$event)"></tp-folder>
-                                </template>
-                                <template v-if="value.type=='blob'" >
-                                    <span @click="$emit('choose-blog',value)"><i class="fas fa-file-alt"></i>&nbsp;{{key}}</span>
-                                </template>
-                            </li>
-                        </ul>
-                    </div>`
-        })
-        Vue.component('tp-menu', {
-            props: ['folder'],
-            data: function () {
-                return {}
-            },
-            template: `<div style="margin-left:-15px;"><tp-folder :folder="folder" :prop_display="true" @choose-blog="$emit('choose-blog',$event)"></tp-folder></div>`
-        });
-        Vue.component('tp-content', {
-            props: ['width', 'blog'],
-            data: function () {
-                return {
-                    content: ""
-                }
-            },
-            watch: {
-                blog: function (val) {
-                    var vm = this
-                    $.LoadingOverlay("show")
-                    $.getJSON(val.url, function (data) {
-                        if (val.type == "blob") {
-                            vm.content = new Base64().decode(data.content)
-                        } else {
-                            vm.content = data
-                        }
-                        $.LoadingOverlay("hide")
-                    })
-                }
-            },
-            methods: {
-            },
-            template: `
-                <div id="markdown-html" v-markdown="content"></div>`
-        });
         var layout_vm = new Vue({
             el: ".layout",
             data: {
                 layout: {
                     menu_width_percent: LAYOUT.init_menu_width_percent,
-                    side_type:'tree'
+                    side_type: 'tree'
                 },
                 theme: {
                     themes: ["vue"],
@@ -106,7 +61,9 @@
                     blogs: []
                 },
                 content: {
-                    blog: null
+                    blog: null,
+                    outline: [],
+                    cur_header: null
                 }
             },
             watch: {
@@ -115,7 +72,7 @@
                     var link = document.createElement('link');
                     link.type = 'text/css';
                     link.rel = 'stylesheet';
-                    link.href = "theme/" + val + ".css";
+                    link.href = `theme/${val}.css`;
                     head.appendChild(link);
                 }
             },
@@ -129,11 +86,17 @@
                         vm.menu.blogs = tree
                     })
                 },
-                get_tree: function (root, callback) {
-                    if (!root) {
-                        root = "/"
+                scroll_content: function (cur_header) {
+                    this.content.cur_header=cur_header
+                    if (cur_header) {
+                        $('#content').animate({
+                            scrollTop: $('#content')[0].scrollTop + $("#" + cur_header).offset().top
+                        }, 500);
                     }
-                    $.getJSON(GITHUB_API.url.tree, function (result) {
+                },
+                get_tree: function (root, callback) {
+                    var url = GITHUB_API.methods.rootUrl(root)
+                    $.getJSON(url, function (result) {
                         var root = {}
                         $.each(result.tree, function (i, blog) {
                             var path = blog.path.split('/')
@@ -156,10 +119,24 @@
                                 }
                             })
                         })
-                        console.log(root)
                         callback(root)
                     })
                 }
+            },
+            mounted: function () {
+                var vm = this
+                $('#content').scroll(function () {
+                    var headers = $("#content").find(":header")
+                    for (var index = 0; index < headers.length; index++) {
+                        var header = headers[index]
+                        if ($(header).offset().top > 0) {
+                            if (index > 0) {
+                                vm.content.cur_header = headers[index - 1].id
+                            }
+                            break
+                        }
+                    }
+                })
             }
         })
 

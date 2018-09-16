@@ -11,7 +11,7 @@ html,body {
   float: left;
   overflow-y:scroll;
   height: 100%;
-  padding-bottom: 40px;
+  min-width: 200px;
 }
 #content{
   float:right;
@@ -25,17 +25,40 @@ html,body {
 #menu ul{
   list-style: none;
   margin: initial;
+  padding-left:8px;
 }
 #menu li{
   cursor: pointer;
-  color: #777777;
-  margin:6px;
+  color: #888888;
+  margin:10px 6px;
 }
 #menu li:hover{
   color: #444444;
 }
-#side-type{
-  /* margin-bottom: 12px; */
+#menu li.active{
+  color: #444444;
+  background-color: #eee;
+}
+#menu li i{
+  font-size: 14px;
+}
+/* #side-type{
+} */
+#outline ul{
+  list-style: none;
+  margin: 0px;
+  padding-left:16px;
+}
+#outline li{
+  cursor: pointer;
+  color: #444444;
+  margin:3px 0px;
+}
+#outline li span:hover{
+  font-weight: bold;
+}
+#outline li span.active{
+  font-weight: bold;
 }
 #side-type .tab{
   display: inline-block;
@@ -43,6 +66,7 @@ html,body {
   margin:0 8%;
   padding: 10px 0;
   text-align: center;
+  cursor: pointer;
 }
 #side-type .tab.active{
   border-bottom: 4px solid #444444;
