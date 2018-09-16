@@ -26,16 +26,18 @@
                 <div class="tab" :class="{active:layout.side_type=='tree'}" @click="layout.side_type='tree'">Tree</div>
                 <div class="tab" :class="{active:layout.side_type=='outline'}" @click="layout.side_type='outline'">Outline</div>
             </div>
-            <transition name="slide-fade">
-                <div id="menu" v-if="layout.side_type=='tree'" style="padding-left:16px;">
-                    <tp-menu :folder="menu.blogs" :current_blog="content.blog" @choose-blog="content.blog=$event"></tp-menu>
-                </div>
-            </transition>
-            <transition name="slide-fade">
-                <div id="outline" v-if="layout.side_type=='outline'" style="padding-left:16px;">
-                    <tp-outline :outline="content.outline" :cur_header="content.cur_header" @choose-header="scroll_content($event)"></tp-outline>
-                </div>
-            </transition>
+            <div style="width:200%;">
+                <transition name="slide-fade">
+                    <div id="menu" class="slide-content" v-if="layout.side_type=='tree'">
+                        <tp-menu :folder="menu.blogs" :current_blog="content.blog" @choose-blog="content.blog=$event"></tp-menu>
+                    </div>
+                </transition>
+                <transition name="slide-fade">
+                    <div id="outline" class="slide-content" v-if="layout.side_type=='outline'" >
+                        <tp-outline :outline="content.outline" :cur_header="content.cur_header" @choose-header="scroll_content($event)"></tp-outline>
+                    </div>
+                </transition>
+            </div>
         </div>
         <div id="content" :style="{width:(100-layout.menu_width_percent)+'%'}">
             <tp-content :blog="content.blog" @outline-change="content.outline=$event" :cur_header="content.cur_header"></tp-content>
@@ -87,7 +89,7 @@
                     })
                 },
                 scroll_content: function (cur_header) {
-                    this.content.cur_header=cur_header
+                    this.content.cur_header = cur_header
                     if (cur_header) {
                         $('#content').animate({
                             scrollTop: $('#content')[0].scrollTop + $("#" + cur_header).offset().top

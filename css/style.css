@@ -13,6 +13,11 @@ html,body {
   height: 100%;
   min-width: 200px;
 }
+.slide-content{
+  width: 45%;
+  padding-left:16px;
+  float: left;
+}
 #content{
   float:right;
   height:100%;
