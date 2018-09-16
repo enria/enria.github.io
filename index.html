@@ -28,7 +28,7 @@
             </div>
             <div style="width:200%;">
                 <transition name="slide-fade">
-                    <div id="menu" class="slide-content" v-if="layout.side_type=='tree'">
+                    <div id="menu" class="slide-content" v-if="layout.side_type=='tree'"> 
                         <tp-menu :folder="menu.blogs" :current_blog="content.blog" @choose-blog="content.blog=$event"></tp-menu>
                     </div>
                 </transition>
