@@ -20,7 +20,7 @@
 </head>
 
 <body>
-    <div class="layout" style="height: 100%;"> 
+    <div class="layout" style="height: 100%;">
         <div id="side" :style="{width:layout.menu_width_percent+'%'}">
             <div id="side-type">
                 <div class="tab" :class="{active:layout.side_type=='tree'}" @click="layout.side_type='tree'">Tree</div>
@@ -33,7 +33,7 @@
                     </div>
                 </transition>
                 <transition name="slide-fade">
-                    <div id="outline" class="slide-content" v-if="layout.side_type=='outline'" >
+                    <div id="outline" class="slide-content" v-if="layout.side_type=='outline'">
                         <tp-outline :outline="content.outline" :cur_header="content.cur_header" @choose-header="scroll_content($event)"></tp-outline>
                     </div>
                 </transition>
