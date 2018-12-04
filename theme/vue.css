@@ -365,7 +365,7 @@ h3 a {
     color: #34495e;
 }
 
-h3 a:before {
+/* h3 a:before {
     content: '#';
     color: #42b983;
     position: absolute;;
@@ -375,7 +375,7 @@ h3 a:before {
     font-size: 1.2em;
     line-height: 1;
     font-weight: bold;
-}
+} */
 
 h1 {
     padding-bottom: .4rem;
