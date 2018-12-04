@@ -76,3 +76,6 @@ html,body {
 #side-type .tab.active{
   border-bottom: 4px solid #444444;
 }
+code{
+  font-family:consolas,monospace
+}
