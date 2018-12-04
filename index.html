@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>enria blog</title>
     <script src="plugin/jquery.js"></script>
     <script src="plugin/vue.js"></script>
@@ -14,138 +13,173 @@
     <script src="js/base64.js"></script>
     <script src="js/guid.js"></script>
     <link type="text/css" rel="stylesheet" href="css/style.css" />
+    <link type="text/css" rel="stylesheet" href="css/icon/iconfont.css" />
     <link type="text/css" rel="stylesheet" href="css/vue-transition.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU"
-        crossorigin="anonymous">
-</head>
+  </head>
 
-<body>
+  <body>
     <div class="layout" style="height: 100%;">
-        <div id="side" :style="{width:layout.menu_width_percent+'%'}">
-            <div id="side-type">
-                <div class="tab" :class="{active:layout.side_type=='tree'}" @click="layout.side_type='tree'">Tree</div>
-                <div class="tab" :class="{active:layout.side_type=='outline'}" @click="layout.side_type='outline'">Outline</div>
-            </div>
-            <div  id="side-list" style="width:200%;">
-                <transition name="slide-fade">
-                    <div id="menu" class="slide-content" v-if="layout.side_type=='tree'">
-                        <tp-menu :folder="menu.blogs" :current_blog="content.blog" @choose-blog="content.blog=$event"></tp-menu>
-                    </div>
-                </transition>
-                <transition name="slide-fade">
-                    <div id="outline" class="slide-content" v-if="layout.side_type=='outline'">
-                        <tp-outline :outline="content.outline" :cur_header="content.cur_header" @choose-header="scroll_content($event)"></tp-outline>
-                    </div>
-                </transition>
-            </div>
+      <div id="side" :style="{width:layout.menu_width_percent+'%'}">
+        <div id="side-type">
+          <div
+            class="tab"
+            :class="{active:layout.side_type=='tree'}"
+            @click="layout.side_type='tree'"
+          >
+            Tree
+          </div>
+          <div
+            class="tab"
+            :class="{active:layout.side_type=='outline'}"
+            @click="layout.side_type='outline'"
+          >
+            Outline
+          </div>
         </div>
-        <div id="content" :style="{width:(100-layout.menu_width_percent)+'%'}">
-            <tp-content :blog="content.blog" @outline-change="content.outline=$event" :cur_header="content.cur_header"></tp-content>
+        <div id="side-list" style="width:200%;">
+          <transition name="slide-fade">
+            <div
+              id="menu"
+              class="slide-content"
+              v-if="layout.side_type=='tree'"
+            >
+              <tp-menu
+                :folder="menu.blogs"
+                :current_blog="content.blog"
+                @choose-blog="content.blog=$event"
+              ></tp-menu>
+            </div>
+          </transition>
+          <transition name="slide-fade">
+            <div
+              id="outline"
+              class="slide-content"
+              v-if="layout.side_type=='outline'"
+            >
+              <tp-outline
+                :outline="content.outline"
+                :cur_header="content.cur_header"
+                @choose-header="scroll_content($event)"
+              ></tp-outline>
+            </div>
+          </transition>
         </div>
+      </div>
+      <div id="content" :style="{width:(100-layout.menu_width_percent)+'%'}">
+        <tp-content
+          :blog="content.blog"
+          @outline-change="content.outline=$event"
+          :cur_header="content.cur_header"
+        ></tp-content>
+      </div>
     </div>
-</body>
-<script src="js/vue-component.js"></script>
-<script src="js/markdown-directive.js"></script>
-<script>
-    $(document).ready(function () {
-        var layout_vm = new Vue({
-            el: ".layout",
-            data: {
-                layout: {
-                    menu_width_percent: LAYOUT.init_menu_width_percent,
-                    side_type: 'tree'
+  </body>
+  <script src="js/vue-component.js"></script>
+  <script src="js/markdown-directive.js"></script>
+  <script>
+    $(document).ready(function() {
+      var layout_vm = new Vue({
+        el: ".layout",
+        data: {
+          layout: {
+            menu_width_percent: LAYOUT.init_menu_width_percent,
+            side_type: "tree"
+          },
+          theme: {
+            themes: ["vue"],
+            current: null
+          },
+          menu: {
+            blogs: []
+          },
+          content: {
+            blog: null,
+            outline: [],
+            cur_header: null
+          }
+        },
+        watch: {
+          "theme.current": function(val) {
+            var head = document.getElementsByTagName("head")[0];
+            var link = document.createElement("link");
+            link.type = "text/css";
+            link.rel = "stylesheet";
+            link.href = `theme/${val}.css`;
+            head.appendChild(link);
+          }
+        },
+        methods: {
+          init_theme: function() {
+            this.theme.current = "vue";
+          },
+          init_tree: function() {
+            var vm = this;
+            this.get_tree(null, function(tree) {
+              vm.menu.blogs = tree;
+            });
+          },
+          scroll_content: function(cur_header) {
+            this.content.cur_header = cur_header;
+            if (cur_header) {
+              $("#content").animate(
+                {
+                  scrollTop:
+                    $("#content")[0].scrollTop +
+                    $("#" + cur_header).offset().top
                 },
-                theme: {
-                    themes: ["vue"],
-                    current: null
-                },
-                menu: {
-                    blogs: []
-                },
-                content: {
-                    blog: null,
-                    outline: [],
-                    cur_header: null
-                }
-            },
-            watch: {
-                "theme.current": function (val) {
-                    var head = document.getElementsByTagName('head')[0];
-                    var link = document.createElement('link');
-                    link.type = 'text/css';
-                    link.rel = 'stylesheet';
-                    link.href = `theme/${val}.css`;
-                    head.appendChild(link);
-                }
-            },
-            methods: {
-                init_theme: function () {
-                    this.theme.current = "vue"
-                },
-                init_tree: function () {
-                    var vm = this
-                    this.get_tree(null, function (tree) {
-                        vm.menu.blogs = tree
-                    })
-                },
-                scroll_content: function (cur_header) {
-                    this.content.cur_header = cur_header
-                    if (cur_header) {
-                        $('#content').animate({
-                            scrollTop: $('#content')[0].scrollTop + $("#" + cur_header).offset().top
-                        }, 500);
-                    }
-                },
-                get_tree: function (root, callback) {
-                    var url = GITHUB_API.methods.rootUrl(root)
-                    $.getJSON(url, function (result) {
-                        var root = {}
-                        $.each(result.tree, function (i, blog) {
-                            var path = blog.path.split('/')
-                            var current = root
-                            $.each(path, function (d, folder) {
-                                if (d >= path.length - 1) {
-                                    if (blog.type == "blob") {
-                                        current[folder] = blog
-                                    } else {
-                                        $.extend(current[folder], blog)
-                                    }
-                                } else {
-                                    if (current[folder]) {
-                                        current = current[folder]
-                                    } else {
-                                        var pass = current
-                                        current = {}
-                                        pass[folder] = current
-                                    }
-                                }
-                            })
-                        })
-                        callback(root)
-                    })
-                }
-            },
-            mounted: function () {
-                var vm = this
-                $('#content').scroll(function () {
-                    var headers = $("#content").find(":header")
-                    for (var index = 0; index < headers.length; index++) {
-                        var header = headers[index]
-                        if ($(header).offset().top > 0) {
-                            if (index > 0) {
-                                vm.content.cur_header = headers[index - 1].id
-                            }
-                            break
-                        }
-                    }
-                })
+                500
+              );
             }
-        })
+          },
+          get_tree: function(root, callback) {
+            var url = GITHUB_API.methods.rootUrl(root);
+            $.getJSON(url, function(result) {
+              var root = {};
+              $.each(result.tree, function(i, blog) {
+                var path = blog.path.split("/");
+                var current = root;
+                $.each(path, function(d, folder) {
+                  if (d >= path.length - 1) {
+                    if (blog.type == "blob") {
+                      current[folder] = blog;
+                    } else {
+                      $.extend(current[folder], blog);
+                    }
+                  } else {
+                    if (current[folder]) {
+                      current = current[folder];
+                    } else {
+                      var pass = current;
+                      current = {};
+                      pass[folder] = current;
+                    }
+                  }
+                });
+              });
+              callback(root);
+            });
+          }
+        },
+        mounted: function() {
+          var vm = this;
+          $("#content").scroll(function() {
+            var headers = $("#content").find(":header");
+            for (var index = 0; index < headers.length; index++) {
+              var header = headers[index];
+              if ($(header).offset().top > 0) {
+                if (index > 0) {
+                  vm.content.cur_header = headers[index - 1].id;
+                }
+                break;
+              }
+            }
+          });
+        }
+      });
 
-        layout_vm.init_tree()
-        layout_vm.init_theme()
-    })
-    var a
-</script>
-
+      layout_vm.init_tree();
+      layout_vm.init_theme();
+    });
+    var a;
+  </script>
 </html>
