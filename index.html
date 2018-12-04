@@ -41,7 +41,7 @@
             <div
               id="menu"
               class="slide-content"
-              v-if="layout.side_type=='tree'"
+              v-show="layout.side_type=='tree'"
             >
               <tp-menu
                 :folder="menu.blogs"
@@ -54,7 +54,7 @@
             <div
               id="outline"
               class="slide-content"
-              v-if="layout.side_type=='outline'"
+              v-show="layout.side_type=='outline'"
             >
               <tp-outline
                 :outline="content.outline"
