@@ -6,7 +6,8 @@ var user = {
         name: "enria",
         data_repo: "tree-markdown-note",
         data_root_path: "/",
-        data_recursive: 10
+        data_recursive: 10,
+        project_repo:"enria.github.io"
     }
 }
 var GITHUB_API = {
@@ -43,6 +44,21 @@ var GITHUB_API = {
                 });
             }
             return url;
+        },
+        projectReadme:function(callback){
+            $.ajax({
+                url: `https://api.github.com/repos/${user.github.name}/${user.github.project_repo}/branches/master`,
+                async: false,
+                success: function (data) {
+                    $.get(`https://api.github.com/repos/${user.github.name}/${user.github.project_repo}/git/trees/${data.commit.sha}`,function(data){
+                        $.each(data["tree"],function(i,d){
+                            if(d["path"]=="README.md"){
+                                callback(d)
+                            }
+                        })
+                    })
+                }
+            });
         }
     }
 }
