@@ -12,6 +12,7 @@ html,body {
   height: 100%;
   min-width: 200px;
   overflow-y:scroll;
+  background-color: #fafafa;
 }
 .slide-content{
   width: 45%;
@@ -78,4 +79,11 @@ html,body {
 }
 code{
   font-family:consolas,monospace
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height:8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #afafaf;
 }
