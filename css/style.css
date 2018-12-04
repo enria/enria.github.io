@@ -10,7 +10,6 @@ html,body {
 #side{
   float: left;
   height: 100%;
-  min-width: 200px;
   overflow-y:scroll;
   background-color: #fafafa;
 }
