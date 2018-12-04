@@ -26,7 +26,7 @@
                 <div class="tab" :class="{active:layout.side_type=='tree'}" @click="layout.side_type='tree'">Tree</div>
                 <div class="tab" :class="{active:layout.side_type=='outline'}" @click="layout.side_type='outline'">Outline</div>
             </div>
-            <div style="width:200%;">
+            <div  id="side-list" style="width:200%;">
                 <transition name="slide-fade">
                     <div id="menu" class="slide-content" v-if="layout.side_type=='tree'">
                         <tp-menu :folder="menu.blogs" :current_blog="content.blog" @choose-blog="content.blog=$event"></tp-menu>
