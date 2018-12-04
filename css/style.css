@@ -11,6 +11,7 @@ html,body {
   float: left;
   height: 100%;
   min-width: 200px;
+  overflow-y:scroll;
 }
 .slide-content{
   width: 45%;
@@ -74,9 +75,6 @@ html,body {
 }
 #side-type .tab.active{
   border-bottom: 4px solid #444444;
-}
-#side-list{
-  overflow-y:scroll;
 }
 code{
   font-family:consolas,monospace
