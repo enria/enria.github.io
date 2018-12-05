@@ -10,3 +10,14 @@
     transform: translateX(10px);
     opacity: 0;
 }
+
+.scroll-fade-enter-active {
+    transition: all .3s ease;
+}
+.scroll-fade-leave-active {
+    transition: all .3s ease;
+}
+.scroll-fade-enter, .scroll-fade-leave-to{
+    transform: translateY(10px);
+    opacity: 0;
+}

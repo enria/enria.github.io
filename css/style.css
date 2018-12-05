@@ -1,87 +1,109 @@
-.embed_bottom{
-  display:none;
+.embed_bottom {
+  display: none;
 }
-html,body {
+html,
+body {
   height: 100%;
 }
 -webkit-scrollbar-button {
   display: none;
 }
-#side{
+#side {
   float: left;
   height: 100%;
-  overflow-y:scroll;
+  overflow-y: scroll;
   background-color: #fafafa;
 }
-.slide-content{
+.slide-content {
   width: 45%;
-  padding-left:16px;
+  padding-left: 16px;
   float: left;
 }
-#content{
-  float:right;
-  height:100%;
-  overflow-y:scroll;
+#content {
+  float: right;
+  height: 100%;
+  overflow-y: scroll;
 }
-#markdown-html{
+#side,
+#content {
+  transition: width 0.4s;
+}
+#markdown {
   width: 80%;
-  margin-left: 20px;
+  margin:auto;
 }
-#menu ul{
+#menu ul {
   list-style: none;
   margin: initial;
-  padding-left:8px;
+  padding-left: 8px;
 }
-#menu li{
+#menu li {
   cursor: pointer;
   color: #888888;
-  margin:10px 6px;
+  margin: 10px 6px;
 }
-#menu li:hover{
+#menu li:hover {
   color: #444444;
 }
-#menu li.active{
+#menu li.active {
   color: #444444;
   background-color: #eee;
 }
-#menu li i{
+#menu li i {
   font-size: 14px;
 }
 /* #side-type{
 } */
-#outline ul{
+#outline ul {
   list-style: none;
   margin: 0px;
-  padding-left:16px;
+  padding-left: 16px;
 }
-#outline li{
+#outline li {
   cursor: pointer;
   color: #444444;
-  margin:3px 0px;
+  margin: 3px 0px;
 }
-#outline li span:hover{
+#outline li span:hover {
   font-weight: bold;
 }
-#outline li span.active{
+#outline li span.active {
   font-weight: bold;
 }
-#side-type .tab{
+#side-type .tab {
   display: inline-block;
   width: 30%;
-  margin:0 8%;
+  margin: 0 8%;
   padding: 10px 0;
   text-align: center;
   cursor: pointer;
 }
-#side-type .tab.active{
+#side-type .tab.active {
   border-bottom: 4px solid #444444;
 }
-code{
-  font-family:consolas,monospace
+
+#switch {
+  position: fixed;
+  bottom: 0px;
+}
+#switch span {
+  cursor: pointer;
+  font-size: 16px;
+  width: 32px;
+  height: 32px;
+  display: inline-block;
+  text-align: center;
+  line-height: 32px;
+}
+#switch span:hover {
+  background-color: #f3f3f3;
+}
+code {
+  font-family: consolas, monospace;
 }
 ::-webkit-scrollbar {
   width: 8px;
-  height:8px;
+  height: 8px;
 }
 ::-webkit-scrollbar-thumb {
   background: #afafaf;

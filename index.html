@@ -68,9 +68,23 @@
       <div id="content" :style="{width:(100-layout.menu_width_percent)+'%'}">
         <tp-content
           :blog="content.blog"
+          :mode="content.mode"
           @outline-change="content.outline=$event"
           :cur_header="content.cur_header"
         ></tp-content>
+        <div id="switch">
+          <span 
+            @click="toggleSlide"
+            @mouseover="layout.menu_width_percent==0?layout.side_switch_class='icon-circleyuanquan':null"
+            @mouseout="layout.menu_width_percent==0?layout.side_switch_class='icon-circle2yuanquan':null"
+            ><i
+              class="iconfont"
+              :class="[layout.side_switch_class]"
+              style="font-size:14px;"
+            ></i
+          ></span>
+          <span @click="toggleMode"><i class="iconfont icon-code"></i></span>
+        </div>
       </div>
     </div>
   </body>
@@ -83,7 +97,8 @@
         data: {
           layout: {
             menu_width_percent: LAYOUT.init_menu_width_percent,
-            side_type: "tree"
+            side_type: "tree",
+            side_switch_class: "icon-left2zuo"
           },
           theme: {
             themes: ["vue"],
@@ -95,7 +110,8 @@
           content: {
             blog: null,
             outline: [],
-            cur_header: null
+            cur_header: null,
+            mode: "html"
           }
         },
         watch: {
@@ -158,6 +174,22 @@
               });
               callback(root);
             });
+          },
+          toggleMode: function() {
+            if (this.content.mode == "html") {
+              this.content.mode = "code";
+            } else {
+              this.content.mode = "html";
+            }
+          },
+          toggleSlide: function() {
+            if (this.layout.menu_width_percent > 0) {
+              this.layout.menu_width_percent = 0;
+              this.layout.side_switch_class = "icon-circle2yuanquan";
+            } else {
+              this.layout.menu_width_percent = LAYOUT.init_menu_width_percent;
+              this.layout.side_switch_class = "icon-left2zuo";
+            }
           }
         },
         mounted: function() {
@@ -174,9 +206,9 @@
               }
             }
           });
-          GITHUB_API.methods.projectReadme(function(readme){
-              vm.content.blog=readme
-          })
+          GITHUB_API.methods.projectReadme(function(readme) {
+            vm.content.blog = readme;
+          });
         }
       });
 

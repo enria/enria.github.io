@@ -57,7 +57,7 @@ Vue.component("tp-outline", {
     </ul>`
 });
 Vue.component("tp-content", {
-  props: ["blog"],
+  props: ["blog", "mode"],
   data: function() {
     return {
       content: "",
@@ -146,5 +146,10 @@ Vue.component("tp-content", {
       return `<h${level} id="${guid()}">${text}</h${level}>`;
     };
   },
-  template: `<div id="markdown-html" v-html="content_html"></div>`
+  template: `<div id="markdown">
+                    <div v-show="mode=='html'" id="markdown-html" v-html="content_html"></div>
+                <div  v-show="mode=='code'" id="markdown-code">
+                    <p v-for="line in content.split('\\n')">{{line}}</p>
+                </div>
+            </div>`
 });
