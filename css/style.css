@@ -98,6 +98,9 @@ body {
 #switch span:hover {
   background-color: #f3f3f3;
 }
+[v-cloak] {
+  display: none;
+}
 code {
   font-family: consolas, monospace;
 }
