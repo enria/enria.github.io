@@ -7,7 +7,7 @@ Vue.component("tp-folder", {
   },
   template: `
             <div>
-                <span v-if="name" @click="display=!display"><i class="iconfont" :class="[display?'icon-caret-down':'icon-caret-right']" style="font-size:14px;"></i> <i class="iconfont icon-folder"></i>{{name}}</span>
+                <span v-if="name" @click="display=!display"><i class="iconfont" :class="[display?'icon-caretdown':'icon-caretright']"></i> <i class="iconfont icon-folder"></i>{{name}}</span>
                 <transition name="slide-fade">
                     <ul v-show="display">
                         <li v-for="(value,key) in folder" :class="{active:current_blog&&value.type=='blob'&&current_blog.sha==value.sha}">
