@@ -12,8 +12,7 @@
 
 1. Vue（整体的框架）
 2. marked（将markdown转换成HTML显示）
-3. SVG（用来显示思维导图）
-4. iconfont（管理图标）
+3. iconfont（管理图标）
 
 打算实现的功能：
 
@@ -22,3 +21,4 @@
 + 多种主题
 + 显示markdown源码
 + 移动端适配
++ 路由控制
