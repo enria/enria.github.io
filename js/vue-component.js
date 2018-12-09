@@ -1,6 +1,6 @@
 Vue.component("tp-folder", {
   props: ["folder", "name", "prop_display", "current_blog"],
-  data: function() {
+  data: function () {
     return {
       display: !!this.prop_display
     };
@@ -24,14 +24,14 @@ Vue.component("tp-folder", {
 });
 Vue.component("tp-menu", {
   props: ["folder", "current_blog"],
-  data: function() {
+  data: function () {
     return {};
   },
   template: `<div style="margin-left:-15px;"><tp-folder :folder="folder" :current_blog="current_blog" :prop_display="true" @choose-blog="$emit('choose-blog',$event)"></tp-folder></div>`
 });
 Vue.component("tp-header", {
   props: ["header", "cur_header"],
-  data: function() {
+  data: function () {
     return {};
   },
   template: `
@@ -46,7 +46,7 @@ Vue.component("tp-header", {
 });
 Vue.component("tp-outline", {
   props: ["outline", "cur_header"],
-  data: function() {
+  data: function () {
     return {};
   },
   template: `
@@ -58,48 +58,51 @@ Vue.component("tp-outline", {
 });
 Vue.component("tp-content", {
   props: ["blog", "mode"],
-  data: function() {
+  data: function () {
     return {
       content: "",
       renderer: new marked.Renderer()
     };
   },
   watch: {
-    blog: function(val) {
+    blog: function (val) {
       var vm = this;
       $.LoadingOverlay("show");
-      $.getJSON(val.url, function(data) {
+      $.getJSON(val.url, function (data) {
         if (val.type == "blob") {
           vm.content = new Base64().decode(data.content);
         } else {
           vm.content = data;
         }
         $.LoadingOverlay("hide");
+        setTimeout(() => {
+          Prism.highlightAllUnder(vm.$el)
+        }, 100);
       });
     },
-    outline: function(val) {
+    outline: function (val) {
       this.$emit("outline-change", val);
     }
   },
   computed: {
-    content_html: function() {
+    content_html: function () {
       if (this.content) {
         var content_html = marked(this.content, { renderer: this.renderer });
         return content_html;
       }
     },
-    outline: function() {
+    outline: function () {
       var outline = [];
       var headers = $(`<div>${this.content_html}</div>`).find(":header");
       var stack = [];
-      var current_header = function() {
+      var current_header = function () {
         var current = outline;
-        $.each(stack, function(i, d) {
+        $.each(stack, function (i, d) {
           current = i > 0 ? current.children[d] : current[d];
         });
         return current;
       };
-      var prev_header = function() {
+      var prev_header = function () {
         var current = outline;
         for (var i = 0; i < stack.length - 1; i++) {
           var d = stack[i];
@@ -107,10 +110,10 @@ Vue.component("tp-content", {
         }
         return current;
       };
-      var header_level = function(header) {
+      var header_level = function (header) {
         return parseInt(header.tagName.replace(/[^\d]+/, ""));
       };
-      $.each(headers, function(i, header) {
+      $.each(headers, function (i, header) {
         header = {
           name: $(header).text(),
           id: $(header).attr("id"),
@@ -141,8 +144,8 @@ Vue.component("tp-content", {
       return outline;
     }
   },
-  created: function() {
-    this.renderer.heading = function(text, level) {
+  created: function () {
+    this.renderer.heading = function (text, level) {
       return `<h${level} id="${guid()}">${text}</h${level}>`;
     };
   },
